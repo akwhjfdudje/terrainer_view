@@ -137,7 +137,7 @@ void Application::initOpenGL() {
         60.0f,
         float(m_width) / float(m_height),
         0.1f,
-        farPlane
+        500.0f
     );
     m_terrain = std::make_unique<TerrainMesh>(m_gridWidth, m_gridDepth);
 
@@ -161,11 +161,12 @@ void Application::setupCallbacks() {
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
         if (key == GLFW_KEY_TAB && action == GLFW_PRESS) {
-            // get pointer to app (stored as GLFW user pointer)
+            // get pointer to your app (stored as GLFW user pointer)
             auto app = static_cast<Application*>(glfwGetWindowUserPointer(window));
             app->toggleMouseCapture();
         }
     });
+
 }
 
 void Application::toggleMouseCapture() {
@@ -182,7 +183,6 @@ void Application::run() {
     auto lastTime = clock::now();
 
     while (m_running && !glfwWindowShouldClose(m_window)) {
-        // Time commands:
         auto now = clock::now();
         float dt = std::chrono::duration<float>(now - lastTime).count();
         lastTime = now;
@@ -194,7 +194,6 @@ void Application::run() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // ImGui buttons:
         ImGui::Begin("Terrain Controls");
         ImGui::SliderFloat("Height Scale", &m_terrain->m_scale, 1.0f, 1000.0f);
         ImGui::SliderFloat("Noise Mix", &m_terrain->m_mix, 0.0f, 1.0f);
@@ -215,23 +214,21 @@ void Application::run() {
             m_camera->processMouse(dx, dy);
         }
 
-        // Update & render:
+        // Update & render
         processInput();
         update(dt);
 
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Shader commands:
         m_shader->bind();
-        m_shader->setFloat("uTime", now);
         m_shader->setMat4("uView", m_camera->view());
         m_shader->setMat4("uProj", m_camera->projection());
         m_shader->setVec3("uLightDir", glm::normalize(glm::vec3(0.5f,1.0f,0.3f)));
         m_terrain->draw();
         m_shader->unbind();
 
-        // Render ImGui (broken)
+        // Render ImGui on top
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
