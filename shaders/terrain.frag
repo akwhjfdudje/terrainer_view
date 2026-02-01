@@ -10,9 +10,8 @@ uniform vec3 uLightDir = normalize(vec3(0.5, 1.0, 0.3));
 uniform float uWaterLevel = 0.0;        // Y-coordinate of water surface
 uniform vec3 uWaterColor = vec3(0.0, 0.3, 0.6); // blue water
 uniform float uWaterOpacity = 0.9;      // 0 = fully transparent, 1 = opaque
-uniform float uTime = 0.0; // for wave animation
 
-vec3 getTerrainColor(float h) {
+vec3 getColor(float h) {
     if (h < -30) return vec3(0.0, 0.0, 0.6);      // deep water
     else if (h < 0) return vec3(0.0, 0.5, 1.0);   // shallow water
     else if (h < 30) return vec3(0.2, 0.8, 0.2);   // grass
@@ -24,25 +23,16 @@ void main() {
     vec3 N = normalize(Normal);
     float diff = max(dot(N, normalize(uLightDir)), 0.0);
 
-    // Terrain base color with lighting
-    vec3 terrainColor = getTerrainColor(Height);
-    vec3 litColor = terrainColor * diff;
+    // Terrain base color by height
+    vec3 baseColor = getColor(Height);
+    vec3 litColor = baseColor * diff;
 
-    // Water effect
+    // Water overlay for heights below water level
     if (Height < uWaterLevel) {
-        // Simple wave distortion (offset color slightly by sin waves)
-        float wave = 0.02 * sin(FragPos.x * 3.0 + uTime * 2.0) 
-                   + 0.02 * cos(FragPos.z * 3.0 + uTime * 2.0);
-        
-        // Refraction: mix terrain color with water color
-        float alpha = clamp(uWaterOpacity, 0.0, 1.0);
-        vec3 distortedColor = mix(litColor, uWaterColor, alpha);
-
-        // Slight wave tint
-        distortedColor += wave * 0.1;
-
-        litColor = distortedColor;
+        float alpha = uWaterOpacity; // 0 = fully transparent, 1 = opaque
+        litColor = mix(litColor, uWaterColor, alpha);
     }
 
     FragColor = vec4(litColor, 1.0);
 }
+

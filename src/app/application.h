@@ -5,7 +5,7 @@
 
 class Camera;
 class Shader;
-class TerrainManager;
+class TerrainMesh;
 
 struct GLFWwindow;
 
@@ -20,10 +20,10 @@ public:
     double m_mouseX = 0.0;
     double m_mouseY = 0.0;
 
-    int m_gridWidth = 64;   // NxN grid
-    int m_gridDepth = 64;
+    int m_gridWidth = 1024;   // NxN grid
+    int m_gridDepth = 1024;
 
-    std::unique_ptr<TerrainManager> m_terrain;
+    std::unique_ptr<TerrainMesh> m_terrain;
     std::unique_ptr<Shader> m_shader;
     std::unique_ptr<Camera> m_camera;
 
