@@ -15,7 +15,7 @@ vec3 getColor(float h) {
     if (h < -30) return vec3(0.0, 0.0, 0.6);      // deep water
     else if (h < 0) return vec3(0.0, 0.5, 1.0);   // shallow water
     else if (h < 30) return vec3(0.2, 0.8, 0.2);   // grass
-    else if (h < 100) return vec3(0.5, 0.5, 0.5);   // rock
+    else if (h < 80) return vec3(0.5, 0.5, 0.5);   // rock
     else return vec3(1.0, 1.0, 1.0);               // snow
 }
 
