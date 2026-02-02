@@ -1,6 +1,6 @@
-# Terrain Viewer
+# Terrainer View
 
-This repository contains a terrain viewer, that lets users view procedurally-generated terrain.
+This repository contains a terrain viewer, that lets users view procedurally-generated terrain, using OpenGL.
 
 ## Building
 

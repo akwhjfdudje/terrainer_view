@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(TerrainViewer LANGUAGES CXX)
+project(TerrainerView LANGUAGES CXX)
 
 # Global configuration
 set(CMAKE_CXX_STANDARD 20)
@@ -50,26 +50,26 @@ file(GLOB_RECURSE TERRAIN_SRC
     src/*.cpp
 )
 
-add_executable(terrain_viewer ${TERRAIN_SRC})
+add_executable(terrainer_view ${TERRAIN_SRC})
 
-target_include_directories(terrain_viewer PRIVATE src)
+target_include_directories(terrainer_view PRIVATE src)
 
-target_link_libraries(terrain_viewer PRIVATE
+target_link_libraries(terrainer_view PRIVATE
     glad_gl_core_33
     glfw
     glm
     imgui
 )
 
-enable_warnings(terrain_viewer)
+enable_warnings(terrainer_view)
 
 if (WIN32)
-    target_link_libraries(terrain_viewer PRIVATE opengl32)
+    target_link_libraries(terrainer_view PRIVATE opengl32)
 elseif (APPLE)
     find_library(COCOA Cocoa REQUIRED)
     find_library(OpenGL OpenGL REQUIRED)
-    target_link_libraries(terrain_viewer PRIVATE ${COCOA} ${OpenGL})
+    target_link_libraries(terrainer_view PRIVATE ${COCOA} ${OpenGL})
 else()
-    target_link_libraries(terrain_viewer PRIVATE GL X11 pthread dl)
+    target_link_libraries(terrainer_view PRIVATE GL X11 pthread dl)
 endif()
 
